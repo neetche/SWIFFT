@@ -12,7 +12,10 @@ This is essentially the original code, used to run the tests in that paper, and 
 The implementation is optimized for the computers of that time, 
 Intel 32-bit CPUs with SSE instruction set. 
 The code should compile and run on recent Intel CPUs, and still achieve reasonably good speed, 
-but it does not take advantage of the more recent 64-bit architecture and AVX/AVX2 instruction set. 
+but it does not take advantage of the more recent 64-bit architecture and AVX/AVX2 instruction set.
+
+// Modular math runs @same cockspeed as CPU. f32 could be fatter @xpense of shorter actual number(dunno bout parm depce on f32 arrays vs i32 ones).
+
 
 Code is provided primarily for reproducibility and testing purposes, and it is not meant to be 
 a ready-to-use solution for any application. In particular, it only implements the core 
@@ -30,13 +33,13 @@ a digest **H**, where
 
  - The key **K** is a vector of 1024 integers, each in the range *[0,256]*, 
    but it can be chosen by picking each integer (uniformly at random)
-   in the range *[0,255]* so that it fits a byte.
+   in the range *[0,255]* so that it fits a byte. // Or sparse Vec of <u8> & co-sparse Vec of involution singletons.
  - The message **M** is a vector of 1024 bits (or, equivalently, 128 bytes)
  - The digest **H** is a vector of 64 integers in the range *[0,256]*
 
 Notice how each integer in the digest can take values as large as *256*, which do not fit 
 a single byte. (This is necessary because SWIFFT is based on arithmetic modulo the prime
-*P=257*.) 
+*P=257*.) // Toxik GF :)
 For simplicity, the compression function, as implemented in this code base, encodes the 
 digest **H** as a sequence 
 of 64 bytes (storing the first 8 bits of each number) followed by 64 additional bits, for a total 
@@ -80,7 +83,7 @@ timing measurements. You can run the tests on any `keyfile` and `input` containi
 
 ```
 > make  
-gcc  -O3 -msse -funroll-loops -c swifft.c  
+gcc  -O3 -msse -funlambda -c swifft.c  
 gcc  -c setup.c  
 gcc  swifft.o  setup.o test.c -o test  
 > time ./test test 1000000 <test  
